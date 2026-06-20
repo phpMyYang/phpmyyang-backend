@@ -3,7 +3,6 @@
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Mail\Mailables\Attachment;
 use Illuminate\Mail\Mailables\Content;
@@ -40,7 +39,7 @@ class PortfolioContactMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: 'emails.contact-design', 
+            view: 'emails.contact-design',
         );
     }
 
@@ -60,6 +59,6 @@ class PortfolioContactMail extends Mailable
     public function build()
     {
         return $this->subject('New Inquiry from phpMyYang Portfolio')
-                    ->view('emails.contact-design');
+            ->view('emails.contact-design');
     }
 }
