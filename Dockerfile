@@ -33,3 +33,7 @@ RUN mkdir -p /var/www/html/storage/framework/views \
     && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
 EXPOSE 80
+
+# Ang magic trick: Kukunin nito ang Render Environment Variables 
+# at isusulat sa isang .env file bago buhayin ang server.
+CMD sh -c "printenv > /var/www/html/.env && apache2-foreground"
