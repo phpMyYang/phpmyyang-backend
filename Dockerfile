@@ -34,6 +34,6 @@ RUN mkdir -p /var/www/html/storage/framework/views \
 
 EXPOSE 80
 
-# Kukunin ang variables, ibibigay ang tamang permission sa Apache, 
-# buburahin ang memory/cache ng Laravel, bago paandarin ang website!
-CMD sh -c "printenv > /var/www/html/.env && chown www-data:www-data /var/www/html/.env && chmod 644 /var/www/html/.env && php artisan optimize:clear && apache2-foreground"
+# Sasalain lang ang mga Laravel variables, ibibigay ang tamang permission, 
+# buburahin ang cache ng Laravel, at bubuhayin ang Apache server!
+CMD sh -c "env | grep -E '^(APP|MAIL|RECAPTCHA|SESSION|CACHE|QUEUE|REDIS|LOG|BCRYPT|VITE)_' > /var/www/html/.env && chown www-data:www-data /var/www/html/.env && php artisan optimize:clear && apache2-foreground"
