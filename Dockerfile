@@ -19,9 +19,10 @@ RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf
 # 5. I-copy ang code papasok sa server
 COPY . /var/www/html
 
-# 6. I-install ang Composer (Idinagdag natin ang --no-scripts para hindi mag-crash dahil sa nawawalang .env)
+# 6. I-install ang Composer (Superuser mode, Unlimited RAM, at Force Install)
+ENV COMPOSER_ALLOW_SUPERUSER=1
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN composer install --optimize-autoloader --no-dev --no-scripts
+RUN COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader --no-dev --no-scripts --ignore-platform-reqs
 
 # 7. Siguraduhing may folders bago i-set ang tamang permissions
 RUN mkdir -p /var/www/html/storage/framework/views \
