@@ -34,6 +34,5 @@ RUN mkdir -p /var/www/html/storage/framework/views \
 
 EXPOSE 80
 
-# Sasalain lang ang mga Laravel variables, ibibigay ang tamang permission, 
-# buburahin ang cache ng Laravel, at bubuhayin ang Apache server!
-CMD sh -c "env | grep -E '^(APP|MAIL|RECAPTCHA|SESSION|CACHE|QUEUE|REDIS|LOG|BCRYPT|VITE)_' > /var/www/html/.env && chown www-data:www-data /var/www/html/.env && php artisan optimize:clear && apache2-foreground"
+# Kukunin ang .env mula sa Render secrets, ililipat sa Laravel folder, at bubuhayin ang server!
+CMD sh -c "cp /etc/secrets/.env /var/www/html/.env || true && chown www-data:www-data /var/www/html/.env || true && php artisan optimize:clear && apache2-foreground"
