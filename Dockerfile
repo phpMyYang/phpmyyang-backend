@@ -34,6 +34,6 @@ RUN mkdir -p /var/www/html/storage/framework/views \
 
 EXPOSE 80
 
-# Ang magic trick: Kukunin nito ang Render Environment Variables 
-# at isusulat sa isang .env file bago buhayin ang server.
-CMD sh -c "printenv > /var/www/html/.env && apache2-foreground"
+# Kukunin ang variables, ibibigay ang tamang permission sa Apache, 
+# buburahin ang memory/cache ng Laravel, bago paandarin ang website!
+CMD sh -c "printenv > /var/www/html/.env && chown www-data:www-data /var/www/html/.env && chmod 644 /var/www/html/.env && php artisan optimize:clear && apache2-foreground"
