@@ -1,38 +1,34 @@
-# Gagamit tayo ng PHP 8.2 na may built-in na Apache server
-FROM php:8.2-apache
+# Use PHP 8.4 for composer.lock
+FROM php:8.4-cli
 
-# 1. I-install ang mga system dependencies (Idinagdag natin ang libzip-dev)
+WORKDIR /var/www/html
+
+# Install dependencies
 RUN apt-get update && apt-get install -y \
-    git curl libpng-dev libonig-dev libxml2-dev zip unzip libzip-dev
+    libzip-dev \
+    zip \
+    unzip \
+    git \
+    curl \
+    libonig-dev
 
-# 2. I-install ang PHP extensions (Idinagdag natin ang zip)
-RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd zip
+# Install PHP extensions
+RUN docker-php-ext-install mbstring pcntl bcmath zip
 
-# 3. Paganahin ang Apache URL Rewrite
-RUN a2enmod rewrite
-
-# 4. I-set ang /public folder
-ENV APACHE_DOCUMENT_ROOT /var/www/html/public
-RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
-RUN sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
-
-# 5. I-copy ang code papasok sa server
-COPY . /var/www/html
-
-# 6. I-install ang Composer (Superuser mode, Unlimited RAM, at Force Install)
-ENV COMPOSER_ALLOW_SUPERUSER=1
+# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
-RUN COMPOSER_MEMORY_LIMIT=-1 composer install --optimize-autoloader --no-dev --no-scripts --ignore-platform-reqs
 
-# 7. Siguraduhing may folders bago i-set ang tamang permissions
-RUN mkdir -p /var/www/html/storage/framework/views \
-    /var/www/html/storage/framework/cache \
-    /var/www/html/storage/framework/sessions \
-    /var/www/html/storage/logs \
-    /var/www/html/bootstrap/cache \
-    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+# Copy backend code
+COPY . .
 
-EXPOSE 80
+# Allow the directory into git and install the dependencies with ignored platform reqs to be sure
+RUN git config --global --add safe.directory /var/www/html && \
+    composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Kukunin ang .env mula sa Render secrets, ililipat sa Laravel folder, at bubuhayin ang server!
-CMD sh -c "cp /etc/secrets/.env /var/www/html/.env || true && chown www-data:www-data /var/www/html/.env || true && php artisan optimize:clear && apache2-foreground"
+# Fix ownership at permissions
+RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+
+EXPOSE 8000
+
+# Run Laravel server
+CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]

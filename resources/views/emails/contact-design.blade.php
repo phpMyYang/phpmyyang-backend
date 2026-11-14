@@ -2,14 +2,61 @@
 <html>
 <head>
     <style>
-        body { font-family: Arial, sans-serif; background-color: #f4f4f9; color: #333; padding: 20px; }
-        .container { max-width: 600px; margin: 0 auto; background: #ffffff; padding: 30px; border-radius: 8px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); border-top: 5px solid #FE7743; }
-        .header { text-align: center; border-bottom: 1px solid #ddd; padding-bottom: 20px; margin-bottom: 20px; }
-        .header h2 { color: #273F4F; margin: 0; }
-        .content p { line-height: 1.6; font-size: 16px; margin: 10px 0; }
-        .label { font-weight: bold; color: #FE7743; }
-        .message-box { background: #f9f9f9; padding: 15px; border-left: 4px solid #273F4F; font-style: italic; margin-top: 20px; }
-        .footer { text-align: center; margin-top: 30px; font-size: 12px; color: #888; }
+        body 
+        { 
+            font-family: Arial, sans-serif; 
+            background-color: #f4f4f9; 
+            color: #333; 
+            padding: 20px; 
+        }
+        .container 
+        { 
+            max-width: 600px; 
+            margin: 0 auto; 
+            background: #ffffff; 
+            padding: 30px; 
+            border-radius: 8px; 
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1); 
+            border-top: 5px solid #FE7743; 
+        }
+        .header 
+        { 
+            text-align: center; 
+            border-bottom: 1px solid #ddd; 
+            padding-bottom: 20px; 
+            margin-bottom: 20px; 
+        }
+        .header h2 
+        { 
+            color: #273F4F; 
+            margin: 0; 
+        }
+        .content p 
+        { 
+            line-height: 1.6; 
+            font-size: 16px; 
+            margin: 10px 0; 
+        }
+        .label 
+        { 
+            font-weight: bold; 
+            color: #FE7743; 
+        }
+        .message-box 
+        { 
+            background: #f9f9f9; 
+            padding: 15px; 
+            border-left: 4px solid #273F4F; 
+            font-style: italic; 
+            margin-top: 20px; 
+        }
+        .footer 
+        { 
+            text-align: center; 
+            margin-top: 30px; 
+            font-size: 12px; 
+            color: #888; 
+        }
     </style>
 </head>
 <body>
