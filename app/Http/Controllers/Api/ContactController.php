@@ -29,7 +29,7 @@ class ContactController extends Controller
         }
 
         try {
-            Mail::to('jeremiahoccupation@gmail.com')->send(new PortfolioContactMail($request->all()));
+            Mail::to('jeremiahoccupation@gmail.com')->queue(new PortfolioContactMail($request->all()));
 
             return response()->json(['message' => 'Email sent successfully!'], 200);
         } catch (\Exception $e) {
