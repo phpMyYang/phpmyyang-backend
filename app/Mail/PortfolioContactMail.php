@@ -53,13 +53,4 @@ class PortfolioContactMail extends Mailable implements ShouldQueue
     {
         return [];
     }
-
-    /**
-     * Get the message content design.
-     */
-    public function build()
-    {
-        return $this->subject('New Inquiry from phpMyYang Portfolio')
-            ->view('emails.contact-design');
-    }
 }

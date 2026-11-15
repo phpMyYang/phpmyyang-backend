@@ -1,34 +1,33 @@
-# Use PHP 8.4 for composer.lock
 FROM php:8.4-cli
 
 WORKDIR /var/www/html
 
-# Install dependencies
 RUN apt-get update && apt-get install -y \
     libzip-dev \
     zip \
     unzip \
     git \
     curl \
-    libonig-dev
+    libonig-dev \
+    libsqlite3-dev
 
-# Install PHP extensions
-RUN docker-php-ext-install mbstring pcntl bcmath zip
+RUN docker-php-ext-install mbstring pcntl bcmath zip pdo pdo_sqlite
 
-# Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy backend code
 COPY . .
 
-# Allow the directory into git and install the dependencies with ignored platform reqs to be sure
 RUN git config --global --add safe.directory /var/www/html && \
     composer install --no-interaction --prefer-dist --optimize-autoloader
 
-# Fix ownership at permissions
-RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
+RUN mkdir -p /var/www/html/storage/framework/views \
+    /var/www/html/storage/framework/cache \
+    /var/www/html/storage/framework/sessions \
+    /var/www/html/storage/logs \
+    /var/www/html/bootstrap/cache \
+    && touch /var/www/html/database/database.sqlite \
+    && chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache /var/www/html/database
 
 EXPOSE 8000
 
-# Run Laravel server
-CMD ["php", "artisan", "serve", "--host=0.0.0.0", "--port=8000"]
+CMD sh -c "cp /etc/secrets/.env /var/www/html/.env 2>/dev/null || true && touch /var/www/html/database/database.sqlite && php artisan migrate --force && php artisan optimize:clear && php artisan serve --host=0.0.0.0 --port=${PORT:-8000}"
