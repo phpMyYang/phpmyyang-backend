@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Mail\PortfolioContactMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class ContactController extends Controller
@@ -33,7 +34,11 @@ class ContactController extends Controller
 
             return response()->json(['message' => 'Email sent successfully!'], 200);
         } catch (\Exception $e) {
-            return response()->json(['message' => 'Failed to send email. Server error.'], 500);
+            Log::error('Contact Mail Error: ' . $e->getMessage());
+
+            return response()->json([
+                'message' => 'Failed to send email: ' . $e->getMessage(),
+            ], 500);
         }
     }
 }
