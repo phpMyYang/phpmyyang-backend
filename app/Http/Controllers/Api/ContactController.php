@@ -26,7 +26,6 @@ class ContactController extends Controller
         ]);
 
         if (! $response->json('success')) {
-            // BINAGO NATIN ITO: Idinagdag natin ang error codes ni Google at chineck kung may laman ang env
             return response()->json([
                 'message' => 'reCAPTCHA verification failed. Please try again.',
                 'google_error' => $response->json('error-codes'), 
